@@ -36,5 +36,13 @@ class PositionalEncoding(nn.Module):
             # odd dimensions -> cos
           pe[:, 1::2] = torch.cos(position * div_term)  
 
+          # unsqueeze to add batch dimension
+          pe = pe.unsqueeze(0)
 
-        
+          self.register_buffer('pe', pe)
+
+     def forward(self, x):
+         # x shape: (batch, seq_len, d_model)
+        # pe add karo — position info daal do
+        x = x + self.pe[:, :x.shape[1], :]
+        return self.dropout(x)
