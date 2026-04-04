@@ -1,5 +1,7 @@
+# the first part is building input embedding
 import torch
 import torch.nn as nn 
+import math
 
 class InputEmbedding(nn.Module):
 
@@ -10,4 +12,4 @@ class InputEmbedding(nn.Module):
         self.embedding = nn.Embedding(vocab_size, d_model)
 
     def forward(self, x):
-            
+            return self.embedding(x) * math.sqrt(self.d_model)
