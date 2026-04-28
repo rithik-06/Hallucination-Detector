@@ -1,5 +1,5 @@
 import wikipediaapi
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 from sentence_transformers import SentenceTransformer, util
 from typing import List, Dict
 
@@ -77,17 +77,19 @@ def rank_passages(claim: str, passages: List[Dict], top_k: int = 5) -> List[Dict
 def retrieve_evidence(claim: str) -> List[Dict]:
     """Main function — search both sources and return ranked evidence."""
 
+    # convert full claim to short search query
+    # take first 5 words as keyword query
+    short_query = " ".join(claim.split()[:5])
+
     print(f"🔍 Retrieving evidence for: {claim}")
+    print(f"🔎 Search query: {short_query}")
 
-    # search both sources
-    wiki_passages    = search_wikipedia(claim)
-    ddg_passages     = search_duckduckgo(claim)
+    wiki_passages = search_wikipedia(short_query)
+    ddg_passages  = search_duckduckgo(claim)
 
-    # combine
     all_passages = wiki_passages + ddg_passages
     print(f"📚 Found {len(all_passages)} total passages")
 
-    # rank and return top 5
     ranked = rank_passages(claim, all_passages, top_k=5)
     print(f"✅ Returning top {len(ranked)} passages")
 
