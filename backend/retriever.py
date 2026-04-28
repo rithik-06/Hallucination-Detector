@@ -79,7 +79,12 @@ def retrieve_evidence(claim: str) -> List[Dict]:
 
     # convert full claim to short search query
     # take first 5 words as keyword query
-    short_query = " ".join(claim.split()[:5])
+    stop_words = {"for", "the", "a", "an", "of", "in", "on", "at", "to"}
+    words = claim.split()[:6]
+    while words and words[-1].lower() in stop_words:
+      
+      words.pop()
+    short_query = " ".join(words)
 
     print(f"🔍 Retrieving evidence for: {claim}")
     print(f"🔎 Search query: {short_query}")
