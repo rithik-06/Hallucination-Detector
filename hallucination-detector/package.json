@@ -1,0 +1,39 @@
+{
+  "name": "hallucination-detector",
+  "displayName": "Hallucination Detector",
+  "description": "Detects hallucinations in LLM-generated text",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "hallucination-detector.check",
+        "title": "Check for Hallucination"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "hallucination-detector.check",
+          "when": "editorHasSelection",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.100.0",
+    "@types/node": "22.x",
+    "typescript": "^5.9.3"
+  }
+}
