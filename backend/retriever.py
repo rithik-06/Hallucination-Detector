@@ -75,22 +75,18 @@ def rank_passages(claim: str, passages: List[Dict], top_k: int = 5) -> List[Dict
 
 
 def retrieve_evidence(claim: str) -> List[Dict]:
-    """Main function — search both sources and return ranked evidence."""
-
-    # convert full claim to short search query
-    # take first 5 words as keyword query
-    stop_words = {"for", "the", "a", "an", "of", "in", "on", "at", "to"}
-    words = claim.split()[:6]
-    while words and words[-1].lower() in stop_words:
-      
-      words.pop()
-    short_query = " ".join(words)
+    
+    # better query — take key nouns only
+    words = claim.split()
+    stop  = {"the","a","an","of","in","on","at","to","for","is","was","were","by","and","or"}
+    keywords = [w for w in words if w.lower() not in stop]
+    short_query = " ".join(keywords[:5])
 
     print(f"🔍 Retrieving evidence for: {claim}")
     print(f"🔎 Search query: {short_query}")
 
     wiki_passages = search_wikipedia(short_query)
-    ddg_passages  = search_duckduckgo(claim)
+    ddg_passages  = search_duckduckgo(claim)  # full claim for DDG
 
     all_passages = wiki_passages + ddg_passages
     print(f"📚 Found {len(all_passages)} total passages")
